@@ -1,6 +1,8 @@
 package com.thisorthat.chatting_android;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
@@ -17,12 +19,17 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     WebSocketClient client;
+    RecyclerView chatRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        client = new WebSocketClient();
+        chatRecyclerView = findViewById(R.id.chat_contents_recyclerview);
+        chatRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        chatRecyclerView.setAdapter(new ChatAdapter());
+
+        //client = new WebSocketClient();
     }
 }
