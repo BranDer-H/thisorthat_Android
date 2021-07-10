@@ -36,4 +36,14 @@ public class ChatMessage {
         }
         return day + " " + String.valueOf(hours) + "시 " + String.valueOf(minutes) + "분";
     }
+
+    @Override
+    public String toString() {
+        return "ChatMessage{" +
+                "name='" + name + '\'' +
+                ", messageType=" + messageType +
+                ", content='" + content + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 }
