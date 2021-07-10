@@ -4,12 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
@@ -44,13 +50,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 EditText messageContent = findViewById(R.id.input_text);
                 String text = messageContent.getText().toString();
-                ChatMessage chatMessage = new ChatMessage("Kim", MessageType.CHAT, text, System.currentTimeMillis());
+                ChatMessage chatMessage = new ChatMessage(MyProfile.getInstance().getName(), MessageType.CHAT, text, System.currentTimeMillis());
                 client.send(chatMessage);
                 messageContent.getText().clear();
             }
         });
-
         Log.d(TAG, "onCreate, Thread name: " + Thread.currentThread().getName());
-        client = new WebSocketClient();
+
+        client = WebSocketClient.getInstance();
+
+        Intent intent = new Intent(this, SetNamePopupActivity.class);
+        startActivity(intent);
+
     }
 }

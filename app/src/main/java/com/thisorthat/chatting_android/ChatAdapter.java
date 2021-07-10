@@ -50,21 +50,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         Log.d(TAG, ".putChatMessage");
         Log.d(TAG, "putChatMessage, Thread name: " + Thread.currentThread().getName());
         messages.add(chatMessage);
-        MainActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                notifyDataSetChanged();
-            }
-        });
     }
 
     @Override
     public int getItemViewType(int position) {
         Log.d(TAG, ".getItemViewType position: " + position);
         ChatMessage message = messages.get(position);
+        System.out.println("profile: " + MyProfile.getInstance().getName());
         if(message.getMessageType().equals(MessageType.JOIN))
             return 0;
-        else if(message.getName().equals("Kim"))
+        else if(message.getName().equals(MyProfile.getInstance().getName()))
             return 1;
         else
             return 2;
@@ -97,7 +92,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         ChatMessage message = messages.get(position);
         if(message.getMessageType().equals(MessageType.JOIN)){
             holder.content.setText(message.getContent());
-        } else if(message.getName().equals("Kim")){
+        } else if(message.getName().equals(MyProfile.getInstance().getName())){
             holder.content.setText(message.getContent());
             holder.timestamp.setText(String.valueOf(message.getTransferedTime()));
         } else{

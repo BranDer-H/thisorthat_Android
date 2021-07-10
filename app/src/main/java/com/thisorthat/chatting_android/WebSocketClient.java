@@ -1,5 +1,6 @@
 package com.thisorthat.chatting_android;
 
+import android.app.Activity;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -12,11 +13,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class WebSocketClient {
+public class WebSocketClient extends Activity {
     private static final String TAG = WebSocketClient.class.getSimpleName();
     private WebSocket client;
+    private static WebSocketClient webSocketClient;
 
-    public WebSocketClient(){
+    private WebSocketClient(){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -30,9 +32,6 @@ public class WebSocketClient {
                             super.onConnected(websocket, headers);
                             Log.d(TAG, "connected");
                             Log.d(TAG, "onTextMessage, Thread name: " + Thread.currentThread().getName());
-                            ChatMessage chatMessage = new ChatMessage("Kim", MessageType.JOIN, "join", System.currentTimeMillis());
-                            Gson gson = new Gson();
-                            client.sendText(gson.toJson(chatMessage));
                         }
 
                         @Override
@@ -46,6 +45,12 @@ public class WebSocketClient {
 
                             ChatAdapter chatAdapter = ChatAdapter.getInstance();
                             chatAdapter.putChatMessage(chatMessage);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    chatAdapter.notifyDataSetChanged();
+                                }
+                            });
 
                         }
                     });
@@ -57,6 +62,12 @@ public class WebSocketClient {
                 }
             }
         },"socket thread").start();
+    }
+
+    public static WebSocketClient getInstance(){
+        if(webSocketClient == null)
+            return new WebSocketClient();
+        return webSocketClient;
     }
 
     public void send(ChatMessage chatMessage) {
