@@ -66,7 +66,7 @@ public class WebSocketClient extends Activity {
 
     public static WebSocketClient getInstance(){
         if(webSocketClient == null)
-            return new WebSocketClient();
+            return webSocketClient = new WebSocketClient();
         return webSocketClient;
     }
 
