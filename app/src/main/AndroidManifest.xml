@@ -13,12 +13,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Chatting_android"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MainActivity">
+        <activity android:name=".PreSettingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity">
         </activity>
         <activity android:name=".SetNamePopupActivity"
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog">
