@@ -13,55 +13,53 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class WebSocketClient extends Activity {
+public class WebSocketClient {
     private static final String TAG = WebSocketClient.class.getSimpleName();
+    private final String SERVER_URL = "ws://3.37.234.201:8080/chat";
+    private final String LOCAL_URL = "ws://10.0.2.2:8080/chat";
     private WebSocket client;
+    private RoomActivity roomActivity;
     private static WebSocketClient webSocketClient;
 
     private WebSocketClient(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    //client = new WebSocketFactory().createSocket("ws://3.37.234.201:8080/chat");
-                    client = new WebSocketFactory().createSocket("ws://10.0.2.2:8080/chat");
+        try {
+            client = new WebSocketFactory().createSocket(LOCAL_URL);
+            client.addListener(new WebSocketAdapter(){
+                @Override
+                public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
+                    super.onConnected(websocket, headers);
+                    Log.d(TAG, "connected");
                     Log.d(TAG, "onTextMessage, Thread name: " + Thread.currentThread().getName());
-                    client.addListener(new WebSocketAdapter(){
+                }
+
+                @Override
+                public void onTextMessage(WebSocket websocket, String text) throws Exception {
+                    Log.d(TAG, "Message received.");
+                    Log.d(TAG, "onTextMessage, Thread name: " + Thread.currentThread().getName());
+                    super.onTextMessage(websocket, text);
+                    Gson gson = new Gson();
+                    ChatMessage chatMessage = gson.fromJson(text, ChatMessage.class);
+                    Log.d(TAG, chatMessage.toString());
+
+                    ChatAdapter chatAdapter = roomActivity.getChatAdapter();
+                    chatAdapter.putChatMessage(chatMessage);
+                    roomActivity.runOnUiThread(new Runnable() {
                         @Override
-                        public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-                            super.onConnected(websocket, headers);
-                            Log.d(TAG, "connected");
-                            Log.d(TAG, "onTextMessage, Thread name: " + Thread.currentThread().getName());
-                        }
-
-                        @Override
-                        public void onTextMessage(WebSocket websocket, String text) throws Exception {
-                            Log.d(TAG, "Message received.");
-                            Log.d(TAG, "onTextMessage, Thread name: " + Thread.currentThread().getName());
-                            super.onTextMessage(websocket, text);
-                            Gson gson = new Gson();
-                            ChatMessage chatMessage = gson.fromJson(text, ChatMessage.class);
-                            Log.d(TAG, chatMessage.toString());
-
-                            ChatAdapter chatAdapter = ChatAdapter.getInstance();
-                            chatAdapter.putChatMessage(chatMessage);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    chatAdapter.notifyDataSetChanged();
-                                }
-                            });
-
+                        public void run() {
+                            chatAdapter.notifyDataSetChanged();
+                            roomActivity.getChatRecyclerView().scrollToPosition(chatAdapter.getItemCount()-1);
                         }
                     });
-                    client.connect();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (WebSocketException e) {
-                    e.printStackTrace();
+
                 }
-            }
-        },"socket thread").start();
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setRoomActivity(RoomActivity roomActivity){
+        this.roomActivity = roomActivity;
     }
 
     public static WebSocketClient getInstance(){
@@ -70,8 +68,25 @@ public class WebSocketClient extends Activity {
         return webSocketClient;
     }
 
+    public void connect(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    client.connect();
+                } catch (WebSocketException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
     public void send(ChatMessage chatMessage) {
         Gson gson = new Gson();
         client.sendText(gson.toJson(chatMessage));
+    }
+
+    public void closeConnection(){
+        client.sendClose();
     }
 }

@@ -6,13 +6,24 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-public class PreSettingsActivity extends Activity {
+import java.io.Serializable;
+
+public class PreSettingsActivity extends Activity implements Serializable{
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = new Intent(this, MainActivity.class);
+        WebSocketClient.getInstance().connect();
+
+        Intent intent = new Intent(this, SetNamePopupActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onDestroy();
+        WebSocketClient.getInstance().closeConnection();
+        System.exit(0);
     }
 }

@@ -4,34 +4,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 
-import com.neovisionaries.ws.client.WebSocket;
-import com.neovisionaries.ws.client.WebSocketAdapter;
-import com.neovisionaries.ws.client.WebSocketException;
-import com.neovisionaries.ws.client.WebSocketFactory;
+import lombok.Getter;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
-
-public class MainActivity extends AppCompatActivity {
-    private static final String TAG = MainActivity.class.getSimpleName();
+@Getter
+public class RoomActivity extends AppCompatActivity {
+    private static final String TAG = RoomActivity.class.getSimpleName();
 
     WebSocketClient client;
     RecyclerView chatRecyclerView;
+    ChatAdapter chatAdapter;
     Button sendButton;
 
     @Override
@@ -40,9 +27,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
+        client = WebSocketClient.getInstance();
+        client.setRoomActivity(this);
+
         chatRecyclerView = findViewById(R.id.chat_contents_recyclerview);
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        chatRecyclerView.setAdapter(ChatAdapter.getInstance());
+        chatAdapter = new ChatAdapter();
+        //chatAdapter.putChatMessage(new ChatMessage("system", MessageType.JOIN, MyProfile.getInstance().getName() + "님이 입장했습니다.", 0));
+        chatRecyclerView.setAdapter(chatAdapter);
+
+        ChatMessage chatMessage = new ChatMessage(MyProfile.getInstance().getName(), MessageType.JOIN, "", System.currentTimeMillis());
+        client.send(chatMessage);
 
         sendButton = findViewById(R.id.send_button);
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -59,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
         client = WebSocketClient.getInstance();
 
-        Intent intent = new Intent(this, SetNamePopupActivity.class);
-        startActivity(intent);
-
     }
+
 }

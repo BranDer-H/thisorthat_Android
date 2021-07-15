@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".RoomActivity">
         </activity>
         <activity android:name=".SetNamePopupActivity"
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog">

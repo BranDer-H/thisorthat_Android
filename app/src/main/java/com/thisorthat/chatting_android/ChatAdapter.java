@@ -18,32 +18,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     List<ChatMessage> messages;
     private static ChatAdapter chatAdapter = null;
 
-    private ChatAdapter(){
+    public ChatAdapter(){
         messages = new ArrayList<ChatMessage>();
-        /*
-        messages.add(new ChatMessage("system", MessageType.JOIN, "Kim님이 입장했습니다.", System.currentTimeMillis()));
-        messages.add(new ChatMessage("Kim", MessageType.CHAT, "Hello. My name is Kim.", System.currentTimeMillis()));
-        messages.add(new ChatMessage("Kim", MessageType.CHAT, "Hello", System.currentTimeMillis()));
-        messages.add(new ChatMessage("system", MessageType.JOIN, "Hong님이 입장했습니다.", System.currentTimeMillis()));
-        messages.add(new ChatMessage("Hong", MessageType.CHAT, "Hello Kim. My name is Hong", System.currentTimeMillis()));
-        messages.add(new ChatMessage("Kim", MessageType.CHAT, "Hello", System.currentTimeMillis()));
-        messages.add(new ChatMessage("Hong", MessageType.CHAT, "Hello Kim. My name is Hong", System.currentTimeMillis()));
-        messages.add(new ChatMessage("Kim", MessageType.CHAT, "Hello", System.currentTimeMillis()));
-        messages.add(new ChatMessage("Hong", MessageType.CHAT, "Hello Kim. My name is Hong", System.currentTimeMillis()));
-        messages.add(new ChatMessage("Hong", MessageType.CHAT, "Hello Kim. My name is Hong", System.currentTimeMillis()));
-        messages.add(new ChatMessage("Kim", MessageType.CHAT, "Hello", System.currentTimeMillis()));
-        messages.add(new ChatMessage("Hong", MessageType.CHAT, "Hello Kim. My name is Hong", System.currentTimeMillis()));
-        messages.add(new ChatMessage("Hong", MessageType.CHAT, "Hello Kim. My name is Hong", System.currentTimeMillis()));
-        messages.add(new ChatMessage("Kim", MessageType.CHAT, "Hello", System.currentTimeMillis()));
-        messages.add(new ChatMessage("Hong", MessageType.CHAT, "Hello Kim. My name is Hong", System.currentTimeMillis()));
-         */
-    }
-
-    public static ChatAdapter getInstance(){
-        if(chatAdapter == null){
-            return chatAdapter = new ChatAdapter();
-        }
-        return chatAdapter;
     }
 
     public void putChatMessage(ChatMessage chatMessage) {
