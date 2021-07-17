@@ -39,4 +39,5 @@
             android:text="send"/>
 
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

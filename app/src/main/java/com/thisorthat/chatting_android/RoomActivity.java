@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.material.navigation.NavigationView;
+
 import lombok.Getter;
 
 @Getter
@@ -25,7 +27,6 @@ public class RoomActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().hide();
 
         client = WebSocketClient.getInstance();
         client.setRoomActivity(this);
@@ -33,7 +34,6 @@ public class RoomActivity extends AppCompatActivity {
         chatRecyclerView = findViewById(R.id.chat_contents_recyclerview);
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         chatAdapter = new ChatAdapter();
-        //chatAdapter.putChatMessage(new ChatMessage("system", MessageType.JOIN, MyProfile.getInstance().getName() + "님이 입장했습니다.", 0));
         chatRecyclerView.setAdapter(chatAdapter);
 
         ChatMessage chatMessage = new ChatMessage(MyProfile.getInstance().getName(), MessageType.JOIN, "", System.currentTimeMillis());
@@ -53,7 +53,5 @@ public class RoomActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate, Thread name: " + Thread.currentThread().getName());
 
         client = WebSocketClient.getInstance();
-
     }
-
 }

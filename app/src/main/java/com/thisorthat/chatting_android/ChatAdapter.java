@@ -33,7 +33,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         Log.d(TAG, ".getItemViewType position: " + position);
         ChatMessage message = messages.get(position);
         System.out.println("profile: " + MyProfile.getInstance().getName());
-        if(message.getMessageType().equals(MessageType.JOIN))
+        if(message.getName().equals("System"))
             return 0;
         else if(message.getName().equals(MyProfile.getInstance().getName()))
             return 1;
@@ -66,8 +66,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     public void onBindViewHolder(@NonNull ChatAdapter.ChatViewHolder holder, int position) {
         Log.d(TAG, ".onBindViewHolder position: " + position);
         ChatMessage message = messages.get(position);
-        if(message.getMessageType().equals(MessageType.JOIN)){
-            holder.content.setText(message.getContent());
+        if(message.getMessageType().equals(MessageType.JOIN) ){
+            holder.content.setText(message.getContent() + "님이 입장했습니다.");
+        } else if(message.getMessageType().equals(MessageType.LEAVE)){
+            holder.content.setText(message.getContent() + "님이 퇴장했습니다.");
         } else if(message.getName().equals(MyProfile.getInstance().getName())){
             holder.content.setText(message.getContent());
             holder.timestamp.setText(String.valueOf(message.getTransferedTime()));

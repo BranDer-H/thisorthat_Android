@@ -41,8 +41,24 @@ public class WebSocketClient {
                     ChatMessage chatMessage = gson.fromJson(text, ChatMessage.class);
                     Log.d(TAG, chatMessage.toString());
 
+                    /**
+                     * TODO: Message Handler 클래스 분리 필요.
+                     */
                     ChatAdapter chatAdapter = roomActivity.getChatAdapter();
-                    chatAdapter.putChatMessage(chatMessage);
+                    switch(chatMessage.getMessageType()){
+                        case JOIN:
+                        case CHAT:
+                        case LEAVE:
+                            chatAdapter.putChatMessage(chatMessage);
+                            break;
+                        case ERROR:
+                            /** TODO: ERROR 메시지 처리 필요 */
+                            break;
+                        case PARTICIPANTS:
+                            /** TODO: 참여자 이름 처리 필요 */
+                            Log.d(TAG, "Participants: " + chatMessage.getContent());
+                            break;
+                    }
                     roomActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
