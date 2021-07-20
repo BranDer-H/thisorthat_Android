@@ -18,6 +18,7 @@ public class ChatMessage {
     private MessageType messageType;
     private String content;
     private long timestamp;
+    private String color;
 
     public String getTransferedTime(){
         Date date = new Date(timestamp);
@@ -44,6 +45,7 @@ public class ChatMessage {
                 ", messageType=" + messageType +
                 ", content='" + content + '\'' +
                 ", timestamp=" + timestamp +
+                ", color=" + color +
                 '}';
     }
 }

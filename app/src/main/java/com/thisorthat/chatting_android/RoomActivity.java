@@ -36,7 +36,7 @@ public class RoomActivity extends AppCompatActivity {
         chatAdapter = new ChatAdapter();
         chatRecyclerView.setAdapter(chatAdapter);
 
-        ChatMessage chatMessage = new ChatMessage(MyProfile.getInstance().getName(), MessageType.JOIN, "", System.currentTimeMillis());
+        ChatMessage chatMessage = new ChatMessage(MyProfile.getInstance().getName(), MessageType.JOIN, "", System.currentTimeMillis(), "");
         client.send(chatMessage);
 
         sendButton = findViewById(R.id.send_button);
@@ -45,7 +45,7 @@ public class RoomActivity extends AppCompatActivity {
             public void onClick(View v) {
                 EditText messageContent = findViewById(R.id.input_text);
                 String text = messageContent.getText().toString();
-                ChatMessage chatMessage = new ChatMessage(MyProfile.getInstance().getName(), MessageType.CHAT, text, System.currentTimeMillis());
+                ChatMessage chatMessage = new ChatMessage(MyProfile.getInstance().getName(), MessageType.CHAT, text, System.currentTimeMillis(), "");
                 client.send(chatMessage);
                 messageContent.getText().clear();
             }
